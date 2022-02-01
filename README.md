@@ -13,7 +13,7 @@ Double Harvard with arithmetic shifts
 
 
 
-1 Memory Architecture
+1 Memory Architecture 
 
 
 
