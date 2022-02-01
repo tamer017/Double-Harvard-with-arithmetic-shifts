@@ -105,4 +105,20 @@ Double Harvard with arithmetic shifts
           – You are required to understand the pattern in the example and implement it.
 
    ![6](https://user-images.githubusercontent.com/83555471/151936978-cd53c8b1-8dd9-4097-b15a-f23023d3355f.PNG)
+   
+   
+   How to run the code 
+   
+    a)  write your program in assembly language in a text file.
+    b) run the main class
+  
+    The following items is printed in the console after each Clock Cycle:
+        a) The Clock Cycle number.
+        b) The Pipeline stages:
+            • Which instruction is being executed at each stage?
+            • What are the input parameters/values for each stage?
+        c) The updates occurring to the registers in case a register value was changed.
+        d) The updates occurring in the memory (data segment of main memory or data memory ) in case a value was stored or updated in the memory.
+        e) The content of all registers after the last clock cycle.
+        f) The full content of the memory (main memory or instruction and data memories ) after the last clock cycle
 
