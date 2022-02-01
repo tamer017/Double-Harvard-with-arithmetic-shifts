@@ -91,4 +91,10 @@ Double Harvard with arithmetic shifts
             ∗ 3 + (6 ∗ 1) = 9 clock cycles
           – You are required to understand the pattern in the example and implement it.
 
+![4](https://user-images.githubusercontent.com/83555471/151936972-fd47fe00-0e1a-493d-80d9-c53bf8d391da.PNG)
+![5](https://user-images.githubusercontent.com/83555471/151936975-11fec273-d517-4467-83c9-a70aa8299464.PNG)
+![6](https://user-images.githubusercontent.com/83555471/151936978-cd53c8b1-8dd9-4097-b15a-f23023d3355f.PNG)
+![1](https://user-images.githubusercontent.com/83555471/151936981-f49a4e78-a68e-42e0-8675-cf656ad6a8df.PNG)
+![2](https://user-images.githubusercontent.com/83555471/151936984-476e5b81-57c0-4a13-a6c3-49cc23dc5738.PNG)
+![3](https://user-images.githubusercontent.com/83555471/151936986-56409704-0d22-439d-83b3-85bd4ca73bf1.PNG)
 
