@@ -13,7 +13,7 @@ Double Harvard with arithmetic shifts
 
       b) Instruction Memory Size: 1024 * 16
       
-      ![1](https://user-images.githubusercontent.com/83555471/151936981-f49a4e78-a68e-42e0-8675-cf656ad6a8df.PNG)
+  ![1](https://user-images.githubusercontent.com/83555471/151936981-f49a4e78-a68e-42e0-8675-cf656ad6a8df.PNG)
 
         • The instruction memory addresses are from 0 to 2 10 − 1 (0 to 1023).
         • Each memory block (row) contains 1 word which is 16 bits (2 bytes).
@@ -22,7 +22,7 @@ Double Harvard with arithmetic shifts
      
      c) Data Memory Size: 2048 * 8 
      
-     ![2](https://user-images.githubusercontent.com/83555471/151936984-476e5b81-57c0-4a13-a6c3-49cc23dc5738.PNG)
+ ![2](https://user-images.githubusercontent.com/83555471/151936984-476e5b81-57c0-4a13-a6c3-49cc23dc5738.PNG)
 
         • The data memory addresses are from 0 to 2^11 − 1 (0 to 2047).
         • Each memory block (row) contains 1 word which is 8 bits (1 byte).
@@ -35,7 +35,7 @@ Double Harvard with arithmetic shifts
           – Names: R0 to R63
         • 1 Status Register
         
-        ![3](https://user-images.githubusercontent.com/83555471/151936986-56409704-0d22-439d-83b3-85bd4ca73bf1.PNG)
+   ![3](https://user-images.githubusercontent.com/83555471/151936986-56409704-0d22-439d-83b3-85bd4ca73bf1.PNG)
 
           – Name: SREG
           – A status register, flag register, or condition code register (CCR) is a collection of statusflag bits for a processor.
@@ -70,12 +70,12 @@ Double Harvard with arithmetic shifts
       
       b) Instruction Types: 2
       
-     ![4](https://user-images.githubusercontent.com/83555471/151936972-fd47fe00-0e1a-493d-80d9-c53bf8d391da.PNG)
+   ![4](https://user-images.githubusercontent.com/83555471/151936972-fd47fe00-0e1a-493d-80d9-c53bf8d391da.PNG)
 
       c) Instruction Count: 12
         • The opcodes are from 0 to 11 according to the instructions order in the following table:
         
-        ![5](https://user-images.githubusercontent.com/83555471/151936975-11fec273-d517-4467-83c9-a70aa8299464.PNG)
+   ![5](https://user-images.githubusercontent.com/83555471/151936975-11fec273-d517-4467-83c9-a70aa8299464.PNG)
 
         “||” symbol indicates concatenation (0100 || 1100 = 01001100).
         ∗ 0 is repeated IMM times before right concatenating it to R1[7-IMM:0].
@@ -104,5 +104,5 @@ Double Harvard with arithmetic shifts
             ∗ 3 + (6 ∗ 1) = 9 clock cycles
           – You are required to understand the pattern in the example and implement it.
 
-       ![6](https://user-images.githubusercontent.com/83555471/151936978-cd53c8b1-8dd9-4097-b15a-f23023d3355f.PNG)
+   ![6](https://user-images.githubusercontent.com/83555471/151936978-cd53c8b1-8dd9-4097-b15a-f23023d3355f.PNG)
 
