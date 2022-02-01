@@ -1,0 +1,8 @@
+beqz r0,ll
+movi r1,5
+movi r2,5
+movi r3,5
+movi r4,5
+movi r5,5
+movi r6,5
+movi r7,5
