@@ -1,114 +1,126 @@
-# Double Harvard Architecture with Arithmetic Shifts — Pipeline Simulator
+# Double Harvard Architecture with Arithmetic Shifts
 
-> A **3-stage pipelined processor simulator** implementing the Double Harvard Architecture with arithmetic shift operations, built in Java.
+> **Java simulation of a fictional Double-Harvard 3-stage pipelined processor with 64 GPRs, a 5-flag status register, 12-instruction ISA, and arithmetic shift operations.**
 
-[![Language](https://img.shields.io/badge/Language-Java-red?style=flat-square)](https://www.java.com/)
-[![Architecture](https://img.shields.io/badge/Architecture-Double%20Harvard-blue?style=flat-square)]()
-[![Type](https://img.shields.io/badge/Type-CPU%20Simulator-orange?style=flat-square)]()
+[![Java](https://img.shields.io/badge/Language-Java-orange.svg)](https://www.java.com/)
+[![Architecture](https://img.shields.io/badge/Architecture-Harvard_Pipeline-blue.svg)]()
 
 ---
 
 ## Overview
 
-This project implements a **software simulation of a custom 3-stage pipelined processor** based on the Double Harvard Architecture. The simulator faithfully models the fetch–decode–execute pipeline, resolves data and control hazards, and includes a **custom assembler** that translates a human-readable instruction set into machine code executable by the simulator.
-
-The Double Harvard Architecture uses **four independent memory spaces** (instruction memory, data memory, I/O space, and an additional data bus), enabling simultaneous instruction fetch and data access without bus contention — a key advantage over the Von Neumann architecture.
+This project simulates a fictional processor design and architecture using Java.
 
 ---
 
-## Architecture
+## 1. Memory Architecture
 
-### Pipeline Stages
+### Architecture: Harvard
 
-```
-[Instruction Memory]
-        |
-        v
-  ┌───────────────┐
-  │  FETCH (IF)    │   ←  PC register, instruction memory bus
-  └───────────────┘
-        |
-        v
-  ┌───────────────┐
-  │  DECODE (ID)   │   ←  Register file read, immediate sign-extension
-  └───────────────┘
-        |
-        v
-  ┌───────────────┐
-  │  EXECUTE (EX)  │   ←  ALU ops, memory access, writeback, branch resolve
-  └───────────────┘
-```
+Harvard Architecture is the digital computer architecture whose design is based on the concept where there are **separate storage and separate buses** (signal path) for instruction and data. It was developed to overcome the bottleneck of Von Neumann Architecture.
 
-### Memory Architecture (Double Harvard)
+### Instruction Memory — 1024 × 16
 
-| Space | Purpose |
+![1](https://user-images.githubusercontent.com/83555471/151936981-f49a4e78-a68e-42e0-8675-cf656ad6a8df.PNG)
+
+- Addresses: 0 to 2¹° − 1 (0 to 1023)
+- Each memory block contains 1 word = **16 bits** (2 bytes)
+- Word addressable
+- Stores program instructions
+
+### Data Memory — 2048 × 8
+
+![2](https://user-images.githubusercontent.com/83555471/151936984-476e5b81-57c0-4a13-a6c3-49cc23dc5738.PNG)
+
+- Addresses: 0 to 2¹¹ − 1 (0 to 2047)
+- Each memory block contains 1 word = **8 bits** (1 byte)
+- Word/byte addressable (1 word = 1 byte)
+- Stores data
+
+### Registers: 66
+
+- **64 General-Purpose Registers (R0 – R63)**, each 8 bits
+- **1 Status Register (SREG)** — 5 flags:
+
+![3](https://user-images.githubusercontent.com/83555471/151936986-56409704-0d22-439d-83b3-85bd4ca73bf1.PNG)
+
+| Flag | Name | Description |
+|---|---|---|
+| **C** | Carry | Set when result > Byte.MAX_VALUE |
+| **V** | Overflow | Set when signed result overflows |
+| **N** | Negative | Set when result is negative |
+| **S** | Sign | S = N ⊕ V |
+| **Z** | Zero | Set when result = 0 |
+
+- **1 Program Counter (PC)** — 16 bits (not 8 bits), holds address of current instruction
+
+---
+
+## 2. Instruction Set Architecture
+
+### Instruction Size: 16 bits
+### Instruction Types: 2
+
+![4](https://user-images.githubusercontent.com/83555471/151936972-fd47fe00-0e1a-493d-80d9-c53bf8d391da.PNG)
+
+### Instruction Count: 12 (opcodes 0 – 11)
+
+![5](https://user-images.githubusercontent.com/83555471/151936975-11fec273-d517-4467-83c9-a70aa8299464.PNG)
+
+### Status Register Flag Updates
+
+| Flag | Updated by |
 |---|---|
-| Instruction Memory | Read-only program storage |
-| Data Memory | Read/write data bus (separate from instructions) |
-| Register File | 8 general-purpose registers (R0–R7) |
-| I/O Space | Memory-mapped I/O ports |
+| **Carry (C)** | ADD, SUB, MUL |
+| **Overflow (V)** | ADD, SUB |
+| **Negative (N)** | ADD, SUB, MUL, ANDI, EOR, SAL, SAR |
+| **Sign (S)** | ADD, SUB |
+| **Zero (Z)** | ADD, SUB, MUL, ANDI, EOR, SAL, SAR |
 
 ---
 
-## Instruction Set
+## 3. Datapath
 
-The processor supports a custom **RISC-style ISA** including:
+### Stages: 3
 
-| Category | Instructions |
-|---|---|
-| Arithmetic | `ADD`, `SUB`, `MUL`, `INC`, `DEC` |
-| Logical | `AND`, `OR`, `XOR`, `NOT` |
-| Shift | `SHL`, `SHR`, `SAL`, `SAR` (arithmetic shifts with sign extension) |
-| Data Transfer | `MOV`, `LOAD`, `STORE` |
-| Control Flow | `JMP`, `JZ`, `JN`, `JC`, `CALL`, `RET` |
+All instructions must pass through all 3 stages:
 
-### Arithmetic Shifts
-The `SAL` and `SAR` (Shift Arithmetic Left/Right) instructions preserve the **sign bit** during right shifts, enabling signed integer division by powers of 2 without overflow. This is the key differentiator from logical shifts (`SHL`/`SHR`).
+- **IF (Instruction Fetch)**: Fetches the next instruction from main memory using the PC address.
+- **ID (Instruction Decode)**: Decodes the instruction and reads required operands from the register file.
+- **EX (Execute)**: Executes the instruction. Performs all ALU operations, memory access (load/store), and writeback to register file.
 
----
+### Pipeline: 3 instructions maximum in parallel
 
-## Custom Assembler
+**Clock cycles formula**: `3 + ((n − 1) × 1)` where n = number of instructions
 
-The project includes a hand-written Java assembler that:
-1. **Tokenizes** assembly source files into lexical units
-2. **Resolves labels** via a two-pass algorithm (first pass: symbol table, second pass: address substitution)
-3. **Encodes instructions** to binary machine code following the custom ISA encoding scheme
-4. **Outputs** a `.mem` file loadable directly into the simulator’s instruction memory
+Example — 7 instructions: `3 + (6 × 1) = 9 clock cycles`
+
+![6](https://user-images.githubusercontent.com/83555471/151936978-cd53c8b1-8dd9-4097-b15a-f23023d3355f.PNG)
 
 ---
 
-## Hazard Handling
+## How to Run
 
-| Hazard Type | Resolution Strategy |
-|---|---|
-| Data hazard (RAW) | Pipeline stalls (bubble insertion) |
-| Control hazard | Branch resolution in EX stage, flush IF/ID on taken branch |
-| Structural hazard | Avoided by architecture (separate instruction/data buses) |
+1. Write your program in assembly language in a text file.
+2. Run the main class.
 
----
+### Console Output After Each Clock Cycle:
 
-## Getting Started
-
-```bash
-# Clone the repository
-git clone https://github.com/tamer017/Double-Harvard-with-arithmetic-shifts.git
-cd Double-Harvard-with-arithmetic-shifts
-
-# Compile the Java simulator
-javac -d out src/**/*.java
-
-# Assemble a program
-java -cp out Assembler programs/fibonacci.asm output.mem
-
-# Run the simulator
-java -cp out Simulator output.mem
-```
+- Clock Cycle number
+- Pipeline stages: which instruction is at each stage + input parameters/values
+- Updates to registers (if any register value changed)
+- Updates to data memory (if any value was stored or updated)
+- Full content of all registers after the last clock cycle
+- Full content of memory after the last clock cycle
 
 ---
 
-## Skills Demonstrated
+## Skills & Concepts
 
-- **Computer Architecture:** Pipeline design, hazard detection, Harvard architecture, ISA design
-- **Java:** Object-oriented simulation, two-pass assembler, binary encoding
-- **Systems Programming:** Low-level register file simulation, memory-mapped I/O modeling
-- **Compiler Theory:** Lexical analysis, symbol table construction, two-pass assembly
+`Computer Architecture` `Harvard Architecture` `Pipeline Simulation` `Java` `Custom ISA` `Arithmetic Shifts` `Register File` `Status Register` `Fetch-Decode-Execute` `Assembly Language`
+
+---
+
+## Author
+
+**Ahmed Tamer Assy** — [GitHub](https://github.com/tamer017) | Machine Learning Researcher @ Volkswagen AG
